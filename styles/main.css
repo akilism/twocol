@@ -1,0 +1,21 @@
+body {
+  font-family: "OpenSans";
+  overflow-x:hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.copy {
+  font-family: "OpenSans";
+}
+
+.headline {
+  font-family: "TradeGothic-BoldCondTwenty";
+}
+
+.react-root {
+  width: 100vw;
+  height: 100vh;
+}
