@@ -18,4 +18,24 @@ body {
 .react-root {
   width: 100vw;
   height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.article {
+  width: 50vw;
+}
+
+.media {
+  width: 50vw;
+  background-color: #000;
+  height: 200vh;
+}
+
+.article p {
+  margin: 2em 0;
 }

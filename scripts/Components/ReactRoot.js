@@ -51,7 +51,7 @@ export default class ReactRoot extends Component {
             <p>Further marches in his memory were held in most cities around Greece on Sunday, with only small-scale clashes reported.</p>
           </div>
         </div>
-        <div></div>
+        <div className="media"></div>
       </div>
     );
   }
