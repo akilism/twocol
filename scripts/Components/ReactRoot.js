@@ -6,16 +6,68 @@ import ArticleHeader from "./ArticleHeader";
 import _ from "lodash";
 
 const galleryImages = requireAll(require.context('../../assets/', true, /.*/));
-
+const imageData = [
+    {full: true},
+    {},
+    {annotations: [
+        {
+          text: "TRANSLATION: CAPITAL IS THE REAL OPIATE OF THE MASSES. REVOLUTION NOW.",
+          position: {x:"32%",y:"32%",},
+          type: "rect",
+          dim: {w: "63%", h:"10%"}
+        }
+    ]}
+]
 
 class Media extends Component {
+  drawer(){
+    if(! this.animating){
+      window.Root.setState({open: ! Root.state.open})
+      this.animating = true
+      setTimeout(() => {
+          this.animating = false
+      },1000)
+    }
+  }
   buildImages(activeIdx) {
     return this.props.images.map((img, idx) => {
-      let classNames = (activeIdx === idx) ? "active-image media-image" : "media-image";
+
+      if(imageData[idx] && imageData[idx].full){
+        let classNames = (activeIdx === idx) ? "active-image full-image" : "full-image";
+        var openerClass = (window.Root && Root.state.open) ? "opener open" : "opener" ;
+        var component = (<div style={{backgroundImage: `url(${this.props.images[idx]})`}} className={classNames}>
+                            <div className={openerClass} onMouseOver={_.bind(this.drawer,this)}></div>
+                        </div>)
+      } else {
+        let classNames = (activeIdx === idx) ? "active-image media-image" : "media-image";
+        var component = <img src={this.props.images[idx]} className={classNames} />
+      }
+
+      if(imageData[idx] && imageData[idx].annotations && activeIdx === idx){
+        var annos = _.map(imageData[idx].annotations,function(a){
+            return (
+              <div>
+                <div className="hover-dot" style={{left: a.position.x, top: a.position.y}}>
+                    <span>?</span>
+                </div>
+                <div className="hover-text" style={{left: a.position.x, top: a.position.y, width: a.dim.w, height: a.dim.h}}>
+                    {a.text}
+                </div>
+              </div>
+            )
+        })
+      } else {
+        var annos = null
+      }
+      var divclass = annos ? "a" : ""
+
 
       return (
-        <img src={this.props.images[idx]} className={classNames} />
-      );
+        <div className={divclass}>
+            {component}
+            {annos}
+        </div>
+      )
     });
   }
 
@@ -25,7 +77,7 @@ class Media extends Component {
           headerClasses = (pctScroll > 0.1) ? "media-header article-header full-opacity" : "media-header article-header zero-opacity";
 
     return (
-      <div ref="media" className="media">
+      <div ref="media" className="media" style={{width: this.props.open ? "99vw" : "50vw"}}>
         <ArticleHeader headerClasses={headerClasses} />
         <div className="media-images" ref="images">
           {this.buildImages(idx)}
@@ -39,6 +91,7 @@ export default class ReactRoot extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      open: false,
       measurements: {
         viewportTop: 0,
         viewportHeight: 0,
@@ -75,6 +128,8 @@ export default class ReactRoot extends Component {
     window.addEventListener('scroll', this.handleScroll.bind(this));
     const { measurements } = this.calculateMeasurements();
     this.setState({measurements});
+    window.Root = this;
+    this.animating = false
   }
 
   clamp (x, min, max) { return Math.min(max, Math.max(min, x)); }
@@ -82,11 +137,7 @@ export default class ReactRoot extends Component {
   _handleScroll(ev) {
     var {measurements} = this.calculateMeasurements(),
         pctScroll = measurements.pctScroll;
-    if (window.ga && pctScroll > this.scroll_marker) {
-      ga('send','event','CityGuideNYCScrollPct','Load',this.scroll_marker);
-      this.scroll_marker += 0.1;
-    }
-    this.setState({measurements});
+    this.setState({measurements, open: false});
   }
 
   calculateMeasurements() {
@@ -107,7 +158,7 @@ export default class ReactRoot extends Component {
       <div ref="root" className="react-root" style={{ height: this.state.measurements.contentHeight,
                                                       width: this.state.measurements.viewportWidth }}>
         <Article ref="article" />
-        <Media measurements={this.state.measurements} images={galleryImages} />
+        <Media open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} />
       </div>
     );
   }
