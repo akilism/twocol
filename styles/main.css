@@ -114,7 +114,7 @@ h1 {
     right:0;
     bottom:0;
     background-size:cover;
-    background-position: center; 
+    background-position: center;
     visibility:hidden;
 }
 .full-image.active-image{

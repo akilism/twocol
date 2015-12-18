@@ -59,15 +59,13 @@ class Media extends Component {
       } else {
         var annos = null
       }
-      var divclass = annos ? "a" : ""
-       
-
+      var divclass = annos ? "a" : "";
       return (
         <div className={divclass}>
             {component}
             {annos}
         </div>
-      ) 
+      )
     });
   }
 
