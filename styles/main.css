@@ -39,3 +39,16 @@ body {
 .article p {
   margin: 2em 0;
 }
+
+h1 {
+      width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    font: bold 2em/1.2em "TradeGothic",Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.publish-date {
+    font-weight: bold;
+    margin-right: 0.25rem;
+  }
