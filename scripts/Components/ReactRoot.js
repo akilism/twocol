@@ -1,9 +1,57 @@
+function requireAll(r) { return r.keys().map(r); }
+
 import { default as React, Component } from "react";
+import _ from "lodash";
+
+const galleryImages = requireAll(require.context('../../assets/', true, /.*/));
+
+
+class Media extends Component {
+  componentWillReceiveProps(nextProps) {
+
+  }
+
+  render() {
+    const { pctScroll } = this.props.measurements,
+          idx = Math.floor(pctScroll * (galleryImages.length - 1)),
+          backgroundImage = galleryImages[idx],
+          headerClasses = (pctScroll > 0.1) ? "media-header article-header full-opacity" : "media-header article-header zero-opacity";
+    return (
+      <div ref="media" className="media" style={{ backgroundImage: `url(${backgroundImage})`,
+                                              // backgroundSize: "cover",
+                                              backgroundRepeat: "no-repeat",
+                                              backgroundPosition: "center center" }}>
+        <div className={headerClasses}>
+            <h1>Athenians Rioted on the Anniversary of the Police Killing of a 15-Year-Old</h1>
+
+            <div className="publish-date-time">
+              <span className="publish-date" data-publish-date="2015-12-07" data-publish-date-format="MMMM D, YYYY">December 7, 2015</span>
+            </div>
+
+              <div className="contributor-information-container">
+                <p className="byline">
+                  Photos by <span>Panagiotis Maidis and Thanasis Kamvisis, Words: Pavlos Toubekis</span>
+                </p>
+              </div>
+          </div>
+      </div>
+    );
+  }
+}
 
 export default class ReactRoot extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      measurements: {
+        viewportTop: 0,
+        viewportHeight: 0,
+        pctScroll: 0,
+        contentHeight: 0
+      }
+    }
     this.start = null;
+    this.handleScroll = _.throttle(this._handleScroll, 16);
   }
 
   animate(time){
@@ -15,14 +63,56 @@ export default class ReactRoot extends Component {
     this.refs.pch.animate(time);
   }
 
+  componentWillMount() {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    this.setState({ measurements: { viewportHeight,
+                                    viewportWidth,
+                                    viewportTop: 0,
+                                    contentHeight: 0,
+                                    pctScroll: 0 } });
+  }
+
   componentDidMount() {
     // this.animate();
+    window.addEventListener('scroll', this.handleScroll.bind(this));
+    const { measurements } = this.calculateMeasurements();
+    this.setState({measurements});
+  }
+
+  clamp (x, min, max) {
+    return Math.min(max, Math.max(min, x));
+  }
+
+  _handleScroll(ev) {
+    var {measurements} = this.calculateMeasurements(),
+        pctScroll = measurements.pctScroll;
+    if (window.ga && pctScroll > this.scroll_marker) {
+      ga('send','event','CityGuideNYCScrollPct','Load',this.scroll_marker);
+      this.scroll_marker += 0.1;
+    }
+    this.setState({measurements});
+  }
+
+  calculateMeasurements() {
+    const viewportTop = window.pageYOffset;
+    const {measurements} = this.state;
+    const {viewportHeight} = measurements;
+    const contentHeight = (measurements.contentHeight === 0) ? this.refs.article.clientHeight : measurements.contentHeight;
+    const pctScroll = this.clamp(viewportTop / (contentHeight - viewportHeight), 0, 1);
+    return { measurements: { ...measurements,
+                             contentHeight,
+                             viewportTop,
+                             pctScroll }
+    };
   }
 
   render() {
     return (
-      <div className="react-root">
-        <div className="article">
+      <div ref="root" className="react-root" style={{ height: this.state.measurements.contentHeight,
+                                                      width: this.state.measurements.viewportWidth }}>
+        <div ref="article" className="article">
           <div className="article-header">
             <h1>Athenians Rioted on the Anniversary of the Police Killing of a 15-Year-Old</h1>
 
@@ -51,7 +141,7 @@ export default class ReactRoot extends Component {
             <p>Further marches in his memory were held in most cities around Greece on Sunday, with only small-scale clashes reported.</p>
           </div>
         </div>
-        <div className="media"></div>
+        <Media measurements={this.state.measurements} />
       </div>
     );
   }

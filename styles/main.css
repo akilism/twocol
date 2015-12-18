@@ -1,6 +1,6 @@
 body {
   font-family: "OpenSans";
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
 
 * {
@@ -18,9 +18,6 @@ body {
 .react-root {
   width: 100vw;
   height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -28,27 +25,63 @@ body {
 
 .article {
   width: 50vw;
+  padding: 3vh 6vw;
 }
 
 .media {
   width: 50vw;
   background-color: #000;
-  height: 200vh;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  color: #fff;
+  padding: 3vh 6vw;
 }
 
-.article p {
-  margin: 2em 0;
+.media-header {
+  transition: opacity 250ms ease-out;
+}
+
+.full-opacity {
+  opacity: 1;
+}
+
+.zero-opacity {
+  opacity: 0;
 }
 
 h1 {
-      width: 100%;
-    margin: 0 auto;
-    padding: 0;
-    position: relative;
-    font: bold 2em/1.2em "TradeGothic",Helvetica Neue,Helvetica,Arial,sans-serif;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  font: bold 2em/1.2em "TradeGothic",Helvetica Neue,Helvetica,Arial,sans-serif;
 }
 
 .publish-date {
     font-weight: bold;
     margin-right: 0.25rem;
   }
+
+.article p {
+  width: 100%;
+  padding: 0;
+  position: relative;
+  color: #000;
+  font-family: Arial,sans-serif;
+  font-size: 1.125rem;
+  line-height: 2rem;
+  display: block;
+  margin: 0 auto 2rem auto;
+  max-width: 100%;
+}
+
+.publish-date-time {
+  font-size: 0.75em;
+}
+
+.byline span {
+  font-size: 0.75em;
+  font-weight: bold;
+}
