@@ -28,28 +28,6 @@ body {
   padding: 3vh 6vw;
 }
 
-.media {
-  width: 50vw;
-  background-color: #000;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  right: 0;
-  color: #fff;
-  padding: 3vh 6vw;
-}
-
-.media-header {
-  transition: opacity 250ms ease-out;
-}
-
-.full-opacity {
-  opacity: 1;
-}
-
-.zero-opacity {
-  opacity: 0;
-}
 
 h1 {
   width: 100%;
@@ -84,4 +62,41 @@ h1 {
 .byline span {
   font-size: 0.75em;
   font-weight: bold;
+}
+
+.media {
+  width: 50vw;
+  background-color: #000;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  color: #fff;
+  padding: 3vh 0;
+}
+
+.media-header {
+  transition: opacity 250ms ease-out;
+  padding: 0 6vw;
+  margin-bottom: 3vh;
+  display: inline-block;
+}
+
+.full-opacity {
+  opacity: 1;
+}
+
+.zero-opacity {
+  opacity: 0;
+}
+
+.media-image {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 250ms ease-in;
+  width: 100%;
+}
+
+.active-image {
+  opacity: 1;
 }
