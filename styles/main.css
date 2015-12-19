@@ -90,6 +90,7 @@ h1 {
 .opener:hover{
     opacity:1;
 }
+
 .opener:before{
     content:"◀";
     position:absolute;
@@ -97,6 +98,7 @@ h1 {
     left:5px;
     font-size:2vw;
 }
+
 .opener.open:before{
     content:"▶";
 }
@@ -172,4 +174,8 @@ h1 {
 
 .active-image {
   opacity: 1;
+}
+
+.media-map {
+  height: 80%;
 }
