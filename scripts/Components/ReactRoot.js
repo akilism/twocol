@@ -11,13 +11,31 @@ const imageData = [
     {},
     {annotations: [
         {
-          text: "TRANSLATION: CAPITAL IS THE REAL OPIATE OF THE MASSES. REVOLUTION NOW.",
+          text: "TRANSLATION: TOTAL DENIAL OF CIVILIZATION FOR TOTAL LIBERATION OF ANIMALS",
           position: {x:"32%",y:"32%",},
           type: "rect",
           dim: {w: "63%", h:"10%"}
         }
     ]}
-]
+];
+
+const mapLocations = [
+  { key: "panep00",
+    description: "Panepistimiou and Voukourestiou Streets",
+    position: { lat: 37.977216, lng: 23.735637 }},
+  { key: "panep01",
+    description: "Panepistimiou and Benaki Streets",
+    position: { lat: 37.983186, lng: 23.730469 }},
+  { key: "exarcheia",
+    description: "Exarcheia Neighborhood",
+    position: { lat: 37.9861256, lng: 23.7336206 }},
+  { key: "omonoia",
+    description: "Omonoia Square",
+    position: { lat: 37.977216, lng: 23.725584 }},
+  { key: "tzavella",
+    description: "Tzavella St",
+    position: { lat: 37.985331, lng: 23.734454 }},
+];
 
 class Media extends Component {
   drawer(){
@@ -29,22 +47,26 @@ class Media extends Component {
       },1000)
     }
   }
+
   buildImages(activeIdx) {
-    return this.props.images.map((img, idx) => {
+    const images = this.props.images.map((img, idx) => {
+      let annos = null,
+          component = null,
+          classNames = null;
 
       if(imageData[idx] && imageData[idx].full){
-        let classNames = (activeIdx === idx) ? "active-image full-image" : "full-image";
-        var openerClass = (window.Root && Root.state.open) ? "opener open" : "opener" ;
-        var component = (<div style={{backgroundImage: `url(${this.props.images[idx]})`}} className={classNames}>
-                            <div className={openerClass} onMouseOver={_.bind(this.drawer,this)}></div>
-                        </div>)
+        const openerClass = (window.Root && Root.state.open) ? "opener open" : "opener";
+        classNames = (activeIdx === idx) ? "active-image full-image" : "full-image";
+        component = (<div style={{backgroundImage: `url(${this.props.images[idx]})`}} className={classNames}>
+                            <div className={openerClass} onClick={_.bind(this.drawer,this)}></div>
+                    </div>);
       } else {
-        let classNames = (activeIdx === idx) ? "active-image media-image" : "media-image";
-        var component = <img src={this.props.images[idx]} className={classNames} />
+        classNames = (activeIdx === idx) ? "active-image media-image" : "media-image";
+        component = (<img src={this.props.images[idx]} className={classNames} />);
       }
 
       if(imageData[idx] && imageData[idx].annotations && activeIdx === idx){
-        var annos = _.map(imageData[idx].annotations,function(a){
+        annos = _.map(imageData[idx].annotations, function(a) {
             return (
               <div>
                 <div className="hover-dot" style={{left: a.position.x, top: a.position.y}}>
@@ -54,12 +76,12 @@ class Media extends Component {
                     {a.text}
                 </div>
               </div>
-            )
-        })
-      } else {
-        var annos = null
+            );
+        });
       }
-      var divclass = annos ? "a" : "";
+
+      const divclass = (annos) ? "a" : "";
+
       return (
         <div className={divclass}>
             {component}
@@ -67,19 +89,31 @@ class Media extends Component {
         </div>
       )
     });
+
+    return (
+      <div className="media-images" ref="images">
+          {images}
+      </div>
+    );
+  }
+
+  buildMap() {
+    return (<div></div>);
   }
 
   render() {
     const { pctScroll } = this.props.measurements,
           idx = Math.floor(pctScroll * (this.props.images.length - 1)),
-          headerClasses = (pctScroll > 0.1) ? "media-header article-header full-opacity" : "media-header article-header zero-opacity";
+          headerClasses = (pctScroll > 0.1) ? "media-header article-header full-opacity" : "media-header article-header zero-opacity",
+          images = (this.props.images) ? this.buildImages(idx) : (&nbsp;),
+          map = (this.props.locations) ? this.buildMap() : (&nbsp;);
 
     return (
       <div ref="media" className="media" style={{width: this.props.open ? "99vw" : "50vw"}}>
         <ArticleHeader headerClasses={headerClasses} />
-        <div className="media-images" ref="images">
-          {this.buildImages(idx)}
-        </div>
+        {images}
+        {map}
+
       </div>
     );
   }
@@ -101,33 +135,24 @@ export default class ReactRoot extends Component {
     this.handleScroll = _.throttle(this._handleScroll, 16);
   }
 
-  animate(time){
-    if(!this.start) { this.start = time; }
-    setTimeout(() => {
-      this.animationId = requestAnimationFrame((t) => {this.animate(t)});
-    }, 1000 / 15);
-
-    this.refs.pch.animate(time);
-  }
-
   componentWillMount() {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    this.setState({ measurements: { viewportHeight,
-                                    viewportWidth,
-                                    viewportTop: 0,
-                                    contentHeight: 0,
-                                    pctScroll: 0 } });
+    this.setState({ measurements: {
+      viewportHeight,
+      viewportWidth,
+      viewportTop: 0,
+      contentHeight: 0,
+      pctScroll: 0 }
+    });
   }
 
   componentDidMount() {
-    // this.animate();
     window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.Root = this;
     const { measurements } = this.calculateMeasurements();
     this.setState({measurements});
-    window.Root = this;
-    this.animating = false
   }
 
   clamp (x, min, max) { return Math.min(max, Math.max(min, x)); }
@@ -135,7 +160,7 @@ export default class ReactRoot extends Component {
   _handleScroll(ev) {
     var {measurements} = this.calculateMeasurements(),
         pctScroll = measurements.pctScroll;
-    this.setState({measurements, open: false});
+    this.setState({ measurements, open: false });
   }
 
   calculateMeasurements() {
@@ -144,11 +169,11 @@ export default class ReactRoot extends Component {
     const {viewportHeight} = measurements;
     const contentHeight = (measurements.contentHeight === 0) ? this.refs.article.refs.article.clientHeight : measurements.contentHeight;
     const pctScroll = this.clamp(viewportTop / (contentHeight - viewportHeight), 0, 1);
-    return { measurements: { ...measurements,
-                             contentHeight,
-                             viewportTop,
-                             pctScroll }
-    };
+    return { measurements: {
+      ...measurements,
+      contentHeight,
+      viewportTop,
+      pctScroll }};
   }
 
   render() {
@@ -156,7 +181,7 @@ export default class ReactRoot extends Component {
       <div ref="root" className="react-root" style={{ height: this.state.measurements.contentHeight,
                                                       width: this.state.measurements.viewportWidth }}>
         <Article ref="article" />
-        <Media open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} />
+        <Media open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} locations={mapLocations} />
       </div>
     );
   }
