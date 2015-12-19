@@ -39,6 +39,8 @@ export default class LocationMap extends Component {
           <GoogleMap
             ref={(map) => map && console.log(map.getZoom())}
             defaultZoom={this.props.center.zoom}
+            zoom={this.props.center.zoom}
+            center={this.props.center.position}
             defaultCenter={this.props.center.position}>
             {children}
           </GoogleMap>
