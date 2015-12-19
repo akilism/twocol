@@ -16,36 +16,47 @@ export default class LocationMap extends Component {
     );
   }
 
+  makeStreetView() {
+    console.log("mapContainer", this.refs["streetviewHolder"]);
+    this.streetview = new google.maps.StreetViewPanorama(this.refs["streetviewHolder"], {...this.props.center});
+  }
+
   getChildren() {
     switch(this.props.center.type) {
       case "polygon":
         return this.makePolygon();
       case "marker":
         return this.makeMarker();
-      // case "streetView":
-      //   return this.makePolygon();
+      case "streetview":
+        return this.makeStreetView();
       default:
         return "&nbsp;";
     }
   }
 
   render() {
-    const children = this.getChildren();
+    const children = this.getChildren(),
+          { type } = this.props.center,
+          mapVis = (type != "streetview") ? "block" : "none",
+          streetviewVis = (type === "streetview") ? "block" : "none";
 
     return (
-      <GoogleMapLoader
-        containerElement={<div {...this.props} style={{ height: "100%" }} />}
-        googleMapElement={
-          <GoogleMap
-            ref={(map) => map && console.log(map.getZoom())}
-            defaultZoom={this.props.center.zoom}
-            zoom={this.props.center.zoom}
-            center={this.props.center.position}
-            defaultCenter={this.props.center.position}>
-            {children}
-          </GoogleMap>
-        }
-      />
+      <div style={{ height: "100%" }}>
+        <GoogleMapLoader
+          containerElement={<div {...this.props} style={{ height: "100%", display: mapVis }} />}
+          googleMapElement={
+            <GoogleMap
+              ref={(map) => map && console.log(map.getZoom())}
+              defaultZoom={this.props.center.zoom}
+              zoom={this.props.center.zoom}
+              center={this.props.center.position}
+              defaultCenter={this.props.center.position}>
+              {children}
+            </GoogleMap>
+          }
+        />
+        <div ref="streetviewHolder" style={{ height: "100%", display: streetviewVis }}></div>
+      </div>
     );
   }
 }
