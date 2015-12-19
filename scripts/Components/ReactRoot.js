@@ -48,8 +48,8 @@ const mapLocations = [
     type: "marker",
     zoom: 16,
     position: { lat: 37.983186, lng: 23.730469 }},
-  { key: "omonoia",
-    description: "Omonoia Square",
+  { key: "omonia",
+    description: "Omonia Square",
     type: "marker",
     zoom: 16,
     position: { lat: 37.977216, lng: 23.725584 }},
@@ -71,8 +71,7 @@ class Media extends Component {
     }
   }
 
-  buildImages(activeIdx) {
-    const images = this.props.images.map((img, idx) => {
+  buildImage(img, idx, activeIdx) {
       let annos = null,
           component = null,
           classNames = null;
@@ -111,19 +110,24 @@ class Media extends Component {
             {annos}
         </div>
       )
-    });
+    }
+
+  buildImages(activeIdx) {
+    const images = this.props.images.map((img, idx) => { return this.buildImage(img, idx, activeIdx); }),
+          classes = (this.props.activeType === "images") ? "media-images media-active media-wrapper" : "media-images media-wrapper";
 
     return (
-      <div className="media-images" ref="images">
+      <div className={classes} ref="images">
           {images}
       </div>
     );
   }
 
   buildMap() {
-    const center = this.props.locations[0];
+    const center = (this.props.activeType === "map") ? _.find(this.props.locations, { key: this.props.activeKey }) : this.props.locations[0],
+          classes = (this.props.activeType === "map") ? "media-map media-active media-wrapper" : "media-map media-wrapper";
     return (
-      <div className="media-map" ref="mediaMap">
+      <div className={classes} ref="mediaMap">
         <LocationMap center={center} locations={this.props.locations} />
       </div>);
   }
@@ -138,6 +142,7 @@ class Media extends Component {
     return (
       <div ref="media" className="media" style={{width: this.props.open ? "99vw" : "50vw"}}>
         <ArticleHeader headerClasses={headerClasses} />
+        {images}
         {mapElem}
       </div>
     );
@@ -149,6 +154,8 @@ export default class ReactRoot extends Component {
     super(props);
     this.state = {
       open: false,
+      mediaType: "images",
+      mediaKey: 0,
       measurements: {
         viewportTop: 0,
         viewportHeight: 0,
@@ -201,8 +208,10 @@ export default class ReactRoot extends Component {
       pctScroll }};
   }
 
-  setMedia(href) {
-    console.log(href);
+  setMedia(hash) {
+    let [type, key] = hash.split("#").slice(1);
+    console.log(type, key);
+    this.setState({mediaType: type, mediaKey: key});
   }
 
   render() {
@@ -210,7 +219,7 @@ export default class ReactRoot extends Component {
       <div ref="root" className="react-root" style={{ height: this.state.measurements.contentHeight,
                                                       width: this.state.measurements.viewportWidth }}>
         <Article ref="article" setMedia={this.setMedia.bind(this)} />
-        <Media open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} locations={mapLocations} />
+        <Media activeType={this.state.mediaType} activeKey={this.state.mediaKey} open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} locations={mapLocations} />
       </div>
     );
   }
