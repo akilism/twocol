@@ -3,6 +3,7 @@ function requireAll(r) { return r.keys().map(r); }
 import { default as React, Component } from "react";
 import Article from "./Article";
 import ArticleHeader from "./ArticleHeader";
+import ImageGallery from "./ImageGallery";
 import LocationMap from "./LocationMap";
 import _ from "lodash";
 
@@ -56,69 +57,17 @@ const mapLocations = [
   { key: "tzavella",
     description: "Tzavella St",
     type: "streetview",
-    zoom: 16,
+    zoom: 1,
     position: { lat: 37.985331, lng: 23.734454 }},
 ];
 
 class Media extends Component {
-  drawer(){
-    if(! this.animating){
-      window.Root.setState({open: ! Root.state.open})
-      this.animating = true
-      setTimeout(() => {
-          this.animating = false
-      },1000)
-    }
-  }
-
-  buildImage(img, idx, activeIdx) {
-      let annos = null,
-          component = null,
-          classNames = null;
-
-      if(imageData[idx] && imageData[idx].full){
-        const openerClass = (window.Root && Root.state.open) ? "opener open" : "opener";
-        classNames = (activeIdx === idx) ? "active-image full-image" : "full-image";
-        component = (<div style={{backgroundImage: `url(${this.props.images[idx]})`}} className={classNames}>
-                            <div className={openerClass} onClick={_.bind(this.drawer,this)}></div>
-                    </div>);
-      } else {
-        classNames = (activeIdx === idx) ? "active-image media-image" : "media-image";
-        component = (<img src={this.props.images[idx]} className={classNames} />);
-      }
-
-      if(imageData[idx] && imageData[idx].annotations && activeIdx === idx){
-        annos = _.map(imageData[idx].annotations, function(a) {
-            return (
-              <div>
-                <div className="hover-dot" style={{left: a.position.x, top: a.position.y}}>
-                    <span>?</span>
-                </div>
-                <div className="hover-text" style={{left: a.position.x, top: a.position.y, width: a.dim.w, height: a.dim.h}}>
-                    {a.text}
-                </div>
-              </div>
-            );
-        });
-      }
-
-      const divclass = (annos) ? "a" : "";
-
-      return (
-        <div className={divclass}>
-            {component}
-            {annos}
-        </div>
-      )
-    }
-
   buildImages(activeIdx) {
-    const images = this.props.images.map((img, idx) => { return this.buildImage(img, idx, activeIdx); }),
-          classes = (this.props.activeType === "images") ? "media-images media-active media-wrapper" : "media-images media-wrapper";
+    const classes = (this.props.activeType === "images") ? "media-images media-active media-wrapper" : "media-images media-wrapper";
 
     return (
       <div className={classes} ref="images">
-          {images}
+          <ImageGallery images={this.props.images} imageData={this.props.imageData}  activeIdx={activeIdx} />
       </div>
     );
   }
@@ -219,7 +168,7 @@ export default class ReactRoot extends Component {
       <div ref="root" className="react-root" style={{ height: this.state.measurements.contentHeight,
                                                       width: this.state.measurements.viewportWidth }}>
         <Article ref="article" setMedia={this.setMedia.bind(this)} />
-        <Media activeType={this.state.mediaType} activeKey={this.state.mediaKey} open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} locations={mapLocations} />
+        <Media activeType={this.state.mediaType} activeKey={this.state.mediaKey} open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} imageData={imageData} locations={mapLocations} />
       </div>
     );
   }

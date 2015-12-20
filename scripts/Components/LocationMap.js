@@ -17,8 +17,14 @@ export default class LocationMap extends Component {
   }
 
   makeStreetView() {
-    console.log("mapContainer", this.refs["streetviewHolder"]);
-    this.streetview = new google.maps.StreetViewPanorama(this.refs["streetviewHolder"], {...this.props.center});
+    // console.log("mapContainer", this.refs["streetviewHolder"]);
+    if(!this.streetview) {
+      this.streetview = new google.maps.StreetViewPanorama(this.refs["streetviewHolder"], {...this.props.center});
+    } else {
+      this.streetview.setPosition(this.props.center.position);
+      this.streetview.setZoom(this.props.center.zoom);
+    }
+
   }
 
   getChildren() {
@@ -32,6 +38,10 @@ export default class LocationMap extends Component {
       default:
         return "&nbsp;";
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (this.props.center.key !== nextProps.center.key);
   }
 
   render() {
