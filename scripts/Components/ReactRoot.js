@@ -12,12 +12,10 @@ const imageData = [
     {full: true},
     {},
     {annotations: [
-        {
-          text: "TRANSLATION: TOTAL DENIAL OF CIVILIZATION FOR TOTAL LIBERATION OF ANIMALS",
+        { text: "TRANSLATION: TOTAL DENIAL OF CIVILIZATION FOR TOTAL LIBERATION OF ANIMALS",
           position: {x:"32%",y:"32%",},
           type: "rect",
-          dim: {w: "63%" }
-        }
+          dim: {w: "63%" } }
     ]}
 ];
 
