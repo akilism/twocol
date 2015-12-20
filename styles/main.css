@@ -76,31 +76,33 @@ h1 {
   -webkit-transition: width 1s;
   transition: width 1s;
 }
-.opener{
-    height:100%;
-    left:0;
-    top:0;
-    width:3vw;
-    background-color:rgba(0,0,0,0.9);
-    position:absolute;
-    cursor:pointer;
-    opacity:0.5;
-    z-index:2;
-}
-.opener:hover{
-    opacity:1;
+
+.opener {
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 3vw;
+    background-color: rgba(0,0,0,0.9);
+    position: absolute;
+    cursor: pointer;
+    opacity: 0.5;
+    z-index: 2;
 }
 
-.opener:before{
-    content:"◀";
-    position:absolute;
-    top:50%;
-    left:5px;
-    font-size:2vw;
+.opener:hover {
+    opacity: 1;
 }
 
-.opener.open:before{
-    content:"▶";
+.opener:before {
+    content: "◀";
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    font-size: 2vw;
+}
+
+.opener.open:before {
+    content: "▶";
 }
 
 .media-header {
@@ -109,56 +111,61 @@ h1 {
   margin-bottom: 3vh;
   display: inline-block;
 }
+
 .full-image{
-    position:absolute;
-    left:0;
-    top:0;
-    right:0;
-    bottom:0;
-    background-size:cover;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
     background-position: center;
-    visibility:hidden;
+    visibility: hidden;
 }
+
 .full-image.active-image{
-    visibility:visible;
+    visibility: visible;
 }
-.
+
+
 .full-opacity {
   opacity: 1;
 }
-.hover-dot{
-    color:black;
-    text-align:center;
+
+.hover-dot {
+    color: black;
+    text-align: center;
     font-family: "TradeGothic-BoldCondTwenty";
-    background-color:white;
-    width:32px;
-    height:32px;
-    position:absolute;
-    font-size:29px;
-    border:2px solid black;
-    z-index:2;
+    background-color: white;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    font-size: 29px;
+    border: 2px solid black;
+    z-index: 2;
 }
-.hover-text{
-    color:black;
-    text-align:center;
+
+.hover-text {
+    color: black;
+    text-align: center;
     font-family: "TradeGothic-BoldCondTwenty";
-    background-color:white;
-    width:32px;
-    height:32px;
-    position:absolute;
-    font-size:27px;
-    border:2px solid black;
-    margin-top:32px;
-    margin-left:32px;
-    padding-top:10px;
-    display:none;
+    background-color: white;
+    position: absolute;
+    font-size: 27px;
+    border: 2px solid black;
+    margin-top: 32px;
+    margin-left: 32px;
+    padding: 10px 10px 3px 10px;
+    display: none;
 }
+
 .hover-dot:hover + .hover-text{
-    display:block;
+    display: block;
 }
+
 .hover-dot span{
-    position:relative;
-    top:2px;
+    position: relative;
+    top: 2px;
 }
 
 .zero-opacity {

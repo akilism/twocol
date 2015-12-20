@@ -16,7 +16,7 @@ const imageData = [
           text: "TRANSLATION: TOTAL DENIAL OF CIVILIZATION FOR TOTAL LIBERATION OF ANIMALS",
           position: {x:"32%",y:"32%",},
           type: "rect",
-          dim: {w: "63%", h:"10%"}
+          dim: {w: "63%" }
         }
     ]}
 ];
