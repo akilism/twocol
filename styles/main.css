@@ -7,6 +7,22 @@ body {
   box-sizing: border-box;
 }
 
+a {
+  color: #000;
+}
+
+a:visited {
+  color: #666;
+}
+
+a:active {
+  color: #aaa;
+}
+
+.no-pointer {
+  pointer-events: none;
+}
+
 .copy {
   font-family: "OpenSans";
 }
@@ -25,7 +41,7 @@ body {
 
 .article {
   width: 50vw;
-  padding: 3vh 6vw;
+  padding: 3vh 4vw;
 }
 
 
@@ -107,12 +123,12 @@ h1 {
 
 .media-header {
   transition: opacity 250ms ease-out;
-  padding: 0 6vw;
+  padding: 0 4vw;
   margin-bottom: 3vh;
   display: inline-block;
 }
 
-.full-image{
+.full-image {
     position: absolute;
     left: 0;
     top: 0;
@@ -123,10 +139,9 @@ h1 {
     visibility: hidden;
 }
 
-.full-image.active-image{
+.full-image.active-image {
     visibility: visible;
 }
-
 
 .full-opacity {
   opacity: 1;
@@ -159,11 +174,11 @@ h1 {
     display: none;
 }
 
-.hover-dot:hover + .hover-text{
+.hover-dot:hover + .hover-text {
     display: block;
 }
 
-.hover-dot span{
+.hover-dot span {
     position: relative;
     top: 2px;
 }
@@ -194,4 +209,99 @@ h1 {
 
 .media-active {
   opacity: 1;
+}
+
+.media-toggles {
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  width: 55px;
+  margin: 15px 0 0 0;
+  position: relative;
+}
+
+.media-toggle:first-child {
+  border-right: 1px solid #fff;
+  padding-right: 12px;
+}
+
+.toggle-inactive {
+  cursor: pointer;
+}
+
+.toggle-inactive:hover {
+  color: #CCFF00;
+}
+
+.toggle-active {
+  color: #CCFF00;
+}
+
+.orig-pub {
+  margin-bottom: 20px;
+  display: inline-block;
+  font-style: italic;
+}
+
+.nfo-box {
+  display: inline-block;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #000;
+  width: 575px;
+}
+
+.nfo-box-head {
+  width: 100%;
+  display: flex;
+}
+
+.nfo-box-head-details {
+  width: 75%;
+  height: 100%;
+}
+
+.nfo-box-head-image {
+  width: 25%;
+  background-size: cover;
+  background-position: center center;
+}
+
+.nfo-box-title {
+  font-family: "TradeGothic-BoldCondTwenty";
+  display: block;
+  font-size: 1.85em;
+}
+
+.nfo-box-subtitle {
+  display: block;
+  font-size: 0.85em;
+}
+
+.nfo-box-head-details {
+  padding: 0.5em;
+}
+
+.nfo-box-content {
+  margin: 1em 0;
+  line-height: 1.25;
+}
+
+.nfo-box-related-articles {
+  display: none;
+}
+
+.nfo-close {
+  font-family: "TradeGothic-BoldCondTwenty";
+  font-size: 1.75em;
+  position: absolute;
+  right: .25em;
+  top: .25em;
+  color: #000;
+}
+
+.nfo-close:hover {
+  cursor: pointer;
+  color: #cf0;
 }

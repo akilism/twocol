@@ -3,8 +3,9 @@ import _ from "lodash";
 import { default as requireAll } from "../lib/requireall";
 import { default as clamp } from "../lib/clamp";
 
-import Article from "./Article";
 import ArticleHeader from "./ArticleHeader";
+import Article from "./Article";
+import InfoBox from "./InfoBox";
 import MediaTray from "./MediaTray";
 
 const galleryImages = requireAll(require.context('../../assets/', true, /.*/)),
@@ -52,15 +53,19 @@ const galleryImages = requireAll(require.context('../../assets/', true, /.*/)),
           description: "Tzavella St",
           type: "streetview",
           zoom: 1,
-          position: { lat: 37.985331, lng: 23.734454 }}];
+          position: { lat: 37.985331, lng: 23.734454 }}],
+      infoBoxData = [{ key: "alexandros_grigoropoulos" }];
 
 export default class ReactRoot extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      mediaType: "images",
+      mediaType: "image",
       mediaKey: 0,
+      infoBox: false,
+      infoBoxKey: null,
+      infoBoxRawPos: {x: 0, y: 0},
       measurements: {
         viewportTop: 0,
         viewportHeight: 0,
@@ -113,15 +118,41 @@ export default class ReactRoot extends Component {
 
   setMedia(hash) {
     let [type, key] = hash.split("#").slice(1);
-    this.setState({mediaType: type, mediaKey: key});
+    this.setState({ mediaType: type, mediaKey: key });
+  }
+
+  showDetails(hash, pos) {
+    let item = hash.replace("#", "");
+
+    if(this.state.infoBox && this.state.infoBoxKey == item) {
+      this.setState({infoBox: false});
+    } else {
+      this.setState({ infoBox: true, infoBoxKey: item, infoBoxRawPos: pos });
+    }
+  }
+
+  hideDetails() {
+    this.setState({infoBox: false});
+  }
+
+  toggleMedia(type) {
+    switch(type) {
+      case "map":
+        this.setState({ mediaType: type, mediaKey: mapLocations[0].key });
+        break;
+      case "image":
+        this.setState({ mediaType: type, mediaKey: 0 });
+        break;
+    }
   }
 
   render() {
     return (
       <div ref="root" className="react-root" style={{ height: this.state.measurements.contentHeight,
                                                       width: this.state.measurements.viewportWidth }}>
-        <Article ref="article" setMedia={this.setMedia.bind(this)} />
-        <MediaTray activeType={this.state.mediaType} activeKey={this.state.mediaKey} open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} imageData={imageData} locations={mapLocations} />
+        <Article ref="article" setMedia={this.setMedia.bind(this)} showDetails={this.showDetails.bind(this)} />
+        <MediaTray toggleMedia={this.toggleMedia.bind(this)} activeType={this.state.mediaType} activeKey={this.state.mediaKey} open={this.state.open} measurements={this.state.measurements} images={_.take(galleryImages,3)} imageData={imageData} locations={mapLocations} />
+        <InfoBox active={this.state.infoBox} rawPos={this.state.infoBoxRawPos} hideInfo={this.hideDetails.bind(this)} />
       </div>
     );
   }

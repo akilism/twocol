@@ -7,7 +7,7 @@ import LocationMap from "./LocationMap";
 
 export default class MediaTray extends Component {
   buildImages(activeIdx) {
-    const classes = (this.props.activeType === "images") ? "media-images media-active media-wrapper" : "media-images media-wrapper";
+    const classes = (this.props.activeType === "image") ? "media-images media-active media-wrapper" : "media-images media-wrapper no-pointer";
 
     return (
       <div className={classes} ref="images">
@@ -18,7 +18,7 @@ export default class MediaTray extends Component {
 
   buildMap() {
     const center = (this.props.activeType === "map") ? _.find(this.props.locations, { key: this.props.activeKey }) : this.props.locations[0],
-          classes = (this.props.activeType === "map") ? "media-map media-active media-wrapper" : "media-map media-wrapper";
+          classes = (this.props.activeType === "map") ? "media-map media-active media-wrapper" : "media-map media-wrapper no-pointer";
     return (
       <div className={classes} ref="mediaMap">
         <LocationMap center={center} locations={this.props.locations} />
@@ -35,7 +35,7 @@ export default class MediaTray extends Component {
 
     return (
       <div ref="media" className="media" style={{width: this.props.open ? "99vw" : "50vw"}}>
-        <ArticleHeader headerClasses={headerClasses} />
+        <ArticleHeader headerClasses={headerClasses} media map={isMap} toggleMedia={this.props.toggleMedia} />
         {images}
         {mapElem}
       </div>
