@@ -17,7 +17,6 @@ export default (
       <title>Two Col Ideas: Greece Article</title>
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <meta charSet="UTF-8" />
-      <link rel="icon" href="http://www.vice.com/assets/images/vice/favicons/mstile-310x310.png"/>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
       <WebpackStyleEntry
         chunkName="client"
